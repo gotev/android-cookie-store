@@ -15,3 +15,43 @@ Add this to your dependencies:
 ```groovy
 implementation 'net.gotev:cookie-store:1.0.0'
 ```
+
+## Usage
+Create your Cookie Manager:
+
+```kotlin
+fun createCookieStore(name: String, persistent: Boolean) = if (persistent) {
+    SharedPreferencesCookieStore(this, name)
+} else {
+    InMemoryCookieStore(name)
+}
+
+val cookieManager = CookieManager(
+    createCookieStore(name = "myCookies", persistent = true),
+    CookiePolicy.ACCEPT_ALL
+)
+```
+
+### HttpURLConnection
+To setup the default Cookie Manager:
+
+```kotlin
+CookieManager.setDefault(cookieManager)
+```
+
+### OkHttp
+Add the following dependency:
+
+```groovy
+implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+```
+
+And when you build your OkHttpClient, set the Cookie Jar:
+
+```kotlin
+val okHttpClient = OkHttpClient.Builder()
+    .cookieJar(JavaNetCookieJar(cookieManager))
+    .build()
+```
+
+That's all folks!
