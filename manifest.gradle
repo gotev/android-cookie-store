@@ -7,8 +7,8 @@ ext {
     maintainer = 'Aleksandar Gotev'
 
     bintray_project_name = 'android-cookie-store'
-    library_description = 'Android InMemory and persistent Cookie Store for HttpURLConnection and OkHttp.'
-    library_keywords = ['your', 'library', 'keywords']
+    library_description = 'Android InMemory and persistent Cookie Store for HttpURLConnection and OkHttp, with extensions to easily sync cookies in Android WebViews.'
+    library_keywords = ['android', 'cookie', 'store', 'httpurlconnection', 'okhttp', 'webview', 'library', 'kotlin']
     library_licenses = ["Apache-2.0"]
     library_licenses_url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
     library_project_group = 'net.gotev'
