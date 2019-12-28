@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cookie Store</string>
+    <string name="login">Login</string>
+    <string name="clear_cookies">Clear Cookies</string>
 </resources>

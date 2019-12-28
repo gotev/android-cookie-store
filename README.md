@@ -1,5 +1,5 @@
 # Android Cookie Store [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/) [ ![Download](https://api.bintray.com/packages/gotev/maven/android-cookie-store/images/download.svg) ](https://bintray.com/gotev/maven/android-upload-service/_latestVersion) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=alexgotev%40gmail%2ecom&lc=US&item_name=Android%20Upload%20Service&item_number=AndroidUploadService&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
-Android InMemory and persistent Cookie Store for `HttpURLConnection` and `OkHttp`.
+Android InMemory and persistent Cookie Store for `HttpURLConnection` and `OkHttp`, with extensions to easily sync cookies in Android WebViews.
 
 ## Why?
 Neither `HttpURLConnection` nor `OkHttp` provides a native and rapid way of storing cookies persistently on Android. This library aims to fill this gap, by extending standard `java.net.CookieStore` in Kotlin, with extendability in mind.
@@ -56,6 +56,20 @@ And when you build your OkHttpClient, set the Cookie Jar:
 val okHttpClient = OkHttpClient.Builder()
     .cookieJar(JavaNetCookieJar(cookieManager))
     .build()
+```
+
+### WebView
+It's a common thing to obtain a cookie from an API and to open an authenticated web page inside an app which needs the cookie. You can find a complete working example in the demo app.
+
+To copy all cookies from the cookie store to the WebKit Cookie Manager:
+```kotlin
+cookieManager.cookieStore.syncToWebKitCookieManager()
+```
+Remember to do this before loading any URL in your web view.
+
+To remove all cookies from WebKit Cookie Manager:
+```kotlin
+android.webkit.CookieManager.getInstance().removeAll()
 ```
 
 That's all folks!

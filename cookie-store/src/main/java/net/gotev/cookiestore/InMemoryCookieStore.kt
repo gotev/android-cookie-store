@@ -138,7 +138,7 @@ open class InMemoryCookieStore(private val name: String) : CookieStore {
     // the path will be taken into account when path-match algorithm applied
     internal fun getEffectiveURI(uri: URI): URI {
         return try {
-            URI("http", uri.host, null, null, null)
+            URI(uri.scheme ?: "http", uri.host, null, null, null)
         } catch (ignored: URISyntaxException) {
             uri
         }
