@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "x$1" == "xlocal" ]
+then
+  echo "Local release..."
+  export LOCAL_MAVEN_URL="file://$(pwd)/releases"
+  mkdir -p releases
+  ./gradlew clean test publish -PmavPublishToInternalRepo=true
+  version=$(cat manifest.gradle | grep library_version | awk '{print $3}' | tr "'" "\n" | head -n 2 | tail -n 1)
+  echo "released local version $version"
+else
+  echo "Bintray release..."
+  ./gradlew clean test publish bintrayUpload
+fi
