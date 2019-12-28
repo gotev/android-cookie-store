@@ -9,6 +9,9 @@ With this library you have:
 - a shared preferences backed cookie store which can survive app reboots
 - possibility to extend both to provide your own custom implementation which best fits your needs without reinventing the wheel for cookie management
 
+## Compatibility
+Android API 16+
+
 ## Getting started
 Add this to your dependencies:
 
