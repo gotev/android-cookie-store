@@ -2,7 +2,7 @@
 Android InMemory and persistent Cookie Store for `HttpURLConnection` and `OkHttp`.
 
 ## Why?
-Neither `HttpURLConnection` nor `OkHttp` provides a native and rapid way of storing cookies on Android. This library aims to fill this gap, by extending standard `java.net.CookieStore` in Kotlin, with extendability in mind.
+Neither `HttpURLConnection` nor `OkHttp` provides a native and rapid way of storing cookies persistently on Android. This library aims to fill this gap, by extending standard `java.net.CookieStore` in Kotlin, with extendability in mind.
 
 With this library you have:
 - an in memory only cookie store
@@ -20,8 +20,9 @@ implementation 'net.gotev:cookie-store:1.0.0'
 Create your Cookie Manager:
 
 ```kotlin
-fun createCookieStore(name: String, persistent: Boolean) = if (persistent) {
-    SharedPreferencesCookieStore(this, name)
+// Example extension function to demonstrate how to create both cookie stores
+fun Context.createCookieStore(name: String, persistent: Boolean) = if (persistent) {
+    SharedPreferencesCookieStore(applicationContext, name)
 } else {
     InMemoryCookieStore(name)
 }
