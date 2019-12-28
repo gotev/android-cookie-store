@@ -10,6 +10,7 @@ import java.util.Collections
 import java.util.LinkedHashMap
 import java.util.concurrent.locks.ReentrantLock
 
+// Kotlin-ized starting from https://chromium.googlesource.com/android_tools/+/master/sdk/sources/android-25/java/net/InMemoryCookieStore.java
 open class InMemoryCookieStore(private val name: String) : CookieStore {
 
     internal val uriIndex = LinkedHashMap<URI, ArrayList<HttpCookie>>()
@@ -32,12 +33,18 @@ open class InMemoryCookieStore(private val name: String) : CookieStore {
 
     override fun add(uri: URI?, cookie: HttpCookie?) {
         if (cookie == null) {
-            Log.i(javaClass.simpleName, "tried to add null cookie in cookie store named $name. Doing nothing.")
+            Log.i(
+                javaClass.simpleName,
+                "tried to add null cookie in cookie store named $name. Doing nothing."
+            )
             return
         }
 
         if (uri == null) {
-            Log.i(javaClass.simpleName, "tried to add null URI in cookie store named $name. Doing nothing.")
+            Log.i(
+                javaClass.simpleName,
+                "tried to add null URI in cookie store named $name. Doing nothing."
+            )
             return
         }
 
@@ -88,12 +95,18 @@ open class InMemoryCookieStore(private val name: String) : CookieStore {
 
     override fun remove(uri: URI?, cookie: HttpCookie?): Boolean {
         if (cookie == null) {
-            Log.i(javaClass.simpleName, "tried to remove null cookie from cookie store named $name. Doing nothing.")
+            Log.i(
+                javaClass.simpleName,
+                "tried to remove null cookie from cookie store named $name. Doing nothing."
+            )
             return true
         }
 
         if (uri == null) {
-            Log.i(javaClass.simpleName, "tried to remove null URI from cookie store named $name. Doing nothing.")
+            Log.i(
+                javaClass.simpleName,
+                "tried to remove null URI from cookie store named $name. Doing nothing."
+            )
             return true
         }
 
@@ -115,7 +128,10 @@ open class InMemoryCookieStore(private val name: String) : CookieStore {
 
     override fun get(uri: URI?): List<HttpCookie> {
         if (uri == null) {
-            Log.i(javaClass.simpleName, "getting cookies from cookie store named $name for null URI results in empty list")
+            Log.i(
+                javaClass.simpleName,
+                "getting cookies from cookie store named $name for null URI results in empty list"
+            )
             return emptyList()
         }
 
