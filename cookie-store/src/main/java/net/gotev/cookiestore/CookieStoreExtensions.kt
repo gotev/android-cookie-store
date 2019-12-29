@@ -41,8 +41,8 @@ fun CookieStore.syncToWebKitCookieManager() {
     }
 }
 
-@SuppressWarnings("DEPRECATION")
 @Synchronized
+@Suppress("DEPRECATION")
 fun android.webkit.CookieManager.removeAll() {
     if (Build.VERSION.SDK_INT >= 21) {
         removeAllCookies(null)
