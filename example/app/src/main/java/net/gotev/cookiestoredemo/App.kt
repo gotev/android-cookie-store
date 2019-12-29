@@ -4,7 +4,7 @@ import android.app.Application
 import net.gotev.cookiestore.InMemoryCookieStore
 import net.gotev.cookiestore.SharedPreferencesCookieStore
 import net.gotev.cookiestore.WebKitSyncCookieManager
-import okhttp3.JavaNetCookieJar
+import net.gotev.cookiestore.okhttp.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

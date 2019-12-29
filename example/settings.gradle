@@ -1,3 +1,5 @@
 include ':app'
 include ':cookie-store'
+include ':cookie-store-okhttp'
 project(':cookie-store').projectDir = file('../cookie-store')
+project(':cookie-store-okhttp').projectDir = file('../cookie-store-okhttp')

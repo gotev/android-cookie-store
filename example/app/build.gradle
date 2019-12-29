@@ -53,10 +53,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation project(':cookie-store')
+    implementation project(':cookie-store-okhttp')
 
     def okHttpVersion = "4.2.2"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     def retrofitVersion = "2.7.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

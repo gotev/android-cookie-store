@@ -1,1 +1,1 @@
-include ':cookie-store'
+include ':cookie-store', ':cookie-store-okhttp'
