@@ -17,7 +17,7 @@ Android API 16+
 Add this to your dependencies:
 
 ```groovy
-implementation 'net.gotev:cookie-store:1.0.1'
+implementation 'net.gotev:cookie-store:1.1.0'
 ```
 
 ## Usage
