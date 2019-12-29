@@ -3,6 +3,7 @@ package net.gotev.cookiestoredemo
 import android.app.Application
 import net.gotev.cookiestore.InMemoryCookieStore
 import net.gotev.cookiestore.SharedPreferencesCookieStore
+import net.gotev.cookiestore.WebKitSyncCookieManager
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -21,7 +22,7 @@ class App : Application() {
         const val cookieStoreName = "myCookies"
         const val username = "userdemo"
 
-        lateinit var cookieManager: CookieManager
+        lateinit var cookieManager: WebKitSyncCookieManager
         lateinit var cookieAPI: CookieAPI
     }
 
@@ -34,7 +35,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        cookieManager = CookieManager(
+        cookieManager = WebKitSyncCookieManager(
             createCookieStore(name = cookieStoreName, persistent = true),
             CookiePolicy.ACCEPT_ALL
         )

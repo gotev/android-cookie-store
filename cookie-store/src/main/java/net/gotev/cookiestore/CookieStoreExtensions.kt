@@ -15,8 +15,8 @@ fun HttpCookie.toSetCookieString(): String {
 
     val calendar = Calendar.getInstance(Locale.UK).apply { set(Calendar.SECOND, maxAge.toInt()) }
     val expires = "; expires=${dateFormat.format(calendar.time)}"
-    val path = if (path != null) "; path=${path}" else ""
-    val domain = if (domain != null) "; domain=${domain}" else ""
+    val path = if (path != null) "; path=$path" else ""
+    val domain = if (domain != null) "; domain=$domain" else ""
     val secure = if (secure) "; secure" else ""
     val httpOnly = if (Build.VERSION.SDK_INT >= 24) {
         if (isHttpOnly) "; httponly" else ""
@@ -24,7 +24,7 @@ fun HttpCookie.toSetCookieString(): String {
         ""
     }
 
-    return "${name}=${value}${expires}${path}${domain}${secure}${httpOnly}"
+    return "$name=$value$expires$path$domain$secure$httpOnly"
 }
 
 @Synchronized

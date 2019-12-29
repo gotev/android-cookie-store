@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import net.gotev.cookiestore.removeAll
-import net.gotev.cookiestore.syncToWebKitCookieManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,15 +26,13 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                         toast("Login OK")
-                        App.cookieManager.cookieStore.syncToWebKitCookieManager()
                         reloadUrl()
                     }
                 })
         }
 
         clearCookies.setOnClickListener {
-            App.cookieManager.cookieStore.removeAll()
-            android.webkit.CookieManager.getInstance().removeAll()
+            App.cookieManager.removeAll()
             toast("Cookies Cleared!")
             reloadUrl()
         }

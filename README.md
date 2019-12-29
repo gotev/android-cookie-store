@@ -62,11 +62,42 @@ val okHttpClient = OkHttpClient.Builder()
 ### WebView
 It's a common thing to obtain a cookie from an API and to open an authenticated web page inside an app which needs the cookie. You can find a complete working example in the demo app.
 
+You have two ways of doing this:
+- Using `WebKitSyncCookieManager`
+- Using standard `java.net.CookieManager`
+
+#### Using WebKitSyncCookieManager
+```kotlin
+val cookieManager = WebKitSyncCookieManager(
+    createCookieStore(name = "myCookies", persistent = true),
+    CookiePolicy.ACCEPT_ALL
+)
+```
+Then follow standard instructions from the Usage section to setup `HttpURLConnection` or `OkHttp` according to your needs.
+
+> Incoming Cookies will be automatically synced to WebKit's CookieManager. Syncing is unidirectional from `java.net.CookieManager` to `android.webkit.CookieManager` to have a single source of truth and to prevent attacks coming from URLs loaded in WebViews. If you need bi-directional sync, think twice before doing it.
+
+To clear cookies:
+
+```kotlin
+cookieManager.removeAll()
+```
+
+This will clear both the `CookieStore` and WebKit's Cookie Manager.
+
+#### Using standard java.net.CookieManager
+Cookies syncing is entirely up to you and manual.
+
 To copy all cookies from the cookie store to the WebKit Cookie Manager:
 ```kotlin
 cookieManager.cookieStore.syncToWebKitCookieManager()
 ```
 Remember to do this before loading any URL in your web view.
+
+To remove all cookies from the Cookie Store:
+```kotlin
+cookieManager.cookieStore.removeAll()
+```
 
 To remove all cookies from WebKit Cookie Manager:
 ```kotlin
