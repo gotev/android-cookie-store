@@ -77,7 +77,7 @@ val cookieManager = WebKitSyncCookieManager(
 ```
 Then follow standard instructions from the Usage section to setup `HttpURLConnection` or `OkHttp` according to your needs.
 
-> Incoming Cookies will be automatically synced to WebKit's CookieManager. Syncing is unidirectional from `java.net.CookieManager` to `android.webkit.CookieManager` to have a single source of truth and to prevent attacks coming from URLs loaded in WebViews. If you need bi-directional sync, think twice before doing it.
+> Incoming Cookies will be automatically synced to WebKit's CookieManager. Syncing is unidirectional from `WebKitSyncCookieManager` to `android.webkit.CookieManager` to have a single source of truth and to prevent attacks coming from URLs loaded in WebViews. If you need bi-directional sync, think twice before doing it.
 
 To clear cookies:
 
