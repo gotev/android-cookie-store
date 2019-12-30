@@ -50,7 +50,7 @@ CookieManager.setDefault(cookieManager)
 Add the following dependency (suitable for JVM and Android):
 
 ```groovy
-implementation 'net.gotev:cookie-store-okhttp:$cookieStoreVersion'
+implementation "net.gotev:cookie-store-okhttp:$cookieStoreVersion"
 ```
 
 And when you build your OkHttpClient, set the Cookie Jar:
