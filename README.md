@@ -19,7 +19,7 @@ Android API 16+
 Add this to your dependencies:
 
 ```groovy
-implementation 'net.gotev:cookie-store:1.1.0'
+implementation "net.gotev:cookie-store:1.2.1"
 ```
 
 ## Usage
@@ -47,10 +47,10 @@ CookieManager.setDefault(cookieManager)
 ```
 
 ### OkHttp
-Add the following dependency:
+Add the following dependency (suitable for JVM and Android):
 
 ```groovy
-implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+implementation 'net.gotev:cookie-store-okhttp:$cookieStoreVersion'
 ```
 
 And when you build your OkHttpClient, set the Cookie Jar:
