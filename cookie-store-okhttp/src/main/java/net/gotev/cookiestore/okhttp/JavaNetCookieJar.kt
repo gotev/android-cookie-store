@@ -3,11 +3,15 @@ package net.gotev.cookiestore.okhttp
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
-import okhttp3.internal.cookieToString
 import java.io.IOException
 import java.net.CookieHandler
 import java.net.HttpCookie
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Collections
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -27,9 +31,62 @@ class JavaNetCookieJar(private val cookieHandler: CookieHandler) : CookieJar {
         Logger.getLogger(javaClass.name)
     }
 
+    private val STANDARD_DATE_FORMAT = object : ThreadLocal<DateFormat>() {
+        override fun initialValue(): DateFormat {
+            // Date format specified by RFC 7231 section 7.1.1.1.
+            return SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US).apply {
+                isLenient = false
+                timeZone = TimeZone.getTimeZone("GMT")
+            }
+        }
+    }
+
     private fun log(level: Int, message: String, t: Throwable?) {
         val logLevel = if (level == WARN) Level.WARNING else Level.INFO
         logger.log(logLevel, message, t)
+    }
+
+    private fun Date.toHttpDateString(): String = STANDARD_DATE_FORMAT.get().format(this)
+
+    /**
+     * @param forObsoleteRfc2965 true to include a leading `.` on the domain pattern. This is
+     *     necessary for `example.com` to match `www.example.com` under RFC 2965. This extra dot is
+     *     ignored by more recent specifications.
+     */
+    private fun Cookie.toString(forObsoleteRfc2965: Boolean): String {
+        return buildString {
+            append(name)
+            append('=')
+            append(value)
+
+            if (persistent) {
+                if (expiresAt == Long.MIN_VALUE) {
+                    append("; max-age=0")
+                } else {
+                    append("; expires=").append(Date(expiresAt).toHttpDateString())
+                }
+            }
+
+            if (!hostOnly) {
+                append("; domain=")
+                if (forObsoleteRfc2965) {
+                    append(".")
+                }
+                append(domain)
+            }
+
+            append("; path=").append(path)
+
+            if (secure) {
+                append("; secure")
+            }
+
+            if (httpOnly) {
+                append("; httponly")
+            }
+
+            return toString()
+        }
     }
 
     /**
@@ -89,7 +146,7 @@ class JavaNetCookieJar(private val cookieHandler: CookieHandler) : CookieJar {
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val cookieStrings = mutableListOf<String>()
         for (cookie in cookies) {
-            cookieStrings.add(cookieToString(cookie, true))
+            cookieStrings.add(cookie.toString(forObsoleteRfc2965 = true))
         }
         val multimap = mapOf("Set-Cookie" to cookieStrings)
         try {
