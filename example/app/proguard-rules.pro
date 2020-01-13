@@ -23,3 +23,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Class is serialized/deserialized over Gson by cookie-store dependency.
+-keep class java.net.HttpCookie { <fields>; }
