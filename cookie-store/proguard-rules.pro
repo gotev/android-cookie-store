@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Application class that will be serialized/deserialized over Gson
+-keep class java.net.HttpCookie { <fields>; }
