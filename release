@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 if [ "x$1" == "xlocal" ]
 then
   echo "Local release..."
@@ -11,3 +11,6 @@ else
   echo "Bintray release..."
   ./gradlew clean test publish bintrayUpload
 fi
+
+version=$(cat manifest.gradle | grep "library_version" | tr "'" '\n' | head -n 2 | tail -n 1)
+// TODO hub release
