@@ -19,8 +19,9 @@ Android API 16+
 Add this to your dependencies:
 
 ```groovy
-implementation "net.gotev:cookie-store:1.2.2"
+implementation "net.gotev:cookie-store:x.y.z"
 ```
+Replace `x.y.z` with [![Download](https://api.bintray.com/packages/gotev/maven/android-cookie-store/images/download.svg) ](https://bintray.com/gotev/maven/android-cookie-store/_latestVersion)
 
 ## Usage
 Create your Cookie Manager:
