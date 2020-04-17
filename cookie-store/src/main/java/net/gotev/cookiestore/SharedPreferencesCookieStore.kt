@@ -37,7 +37,7 @@ open class SharedPreferencesCookieStore(
     override fun removeAll(): Boolean {
         super.removeAll()
 
-        synchronized(true) {
+        synchronized(this) {
             preferences.edit().clear().apply()
         }
         return true
