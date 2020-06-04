@@ -13,4 +13,4 @@ else
 fi
 
 version=$(cat manifest.gradle | grep "library_version" | tr "'" '\n' | head -n 2 | tail -n 1)
-# TODO hub release
+hub release create -m "$version" "$version"
