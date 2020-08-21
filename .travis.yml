@@ -3,11 +3,6 @@ jdk: oraclejdk8
 script: ./gradlew clean build test
 
 android:
-  licenses:
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-
   components:
     - tools
     - platform-tools
