@@ -140,7 +140,8 @@ open class InMemoryCookieStore(private val name: String) : CookieStore {
         lock.lock()
         try {
             cookies.addAll(getInternal1(uri.host))
-            cookies.addAll(getInternal2(getEffectiveURI(uri)))
+            val internal2 = getInternal2(getEffectiveURI(uri)).filter { !cookies.contains(it) }
+            cookies.addAll(internal2)
         } finally {
             lock.unlock()
         }
