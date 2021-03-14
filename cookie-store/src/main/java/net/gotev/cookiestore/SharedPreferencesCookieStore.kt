@@ -38,7 +38,7 @@ open class SharedPreferencesCookieStore(
 
     override fun removeAll(): Boolean = synchronized(SharedPreferencesCookieStore::class.java) {
         super.removeAll()
-        preferences.edit().clear().apply()
+        preferences.edit().clear().commit()
         true
     }
 
@@ -50,7 +50,7 @@ open class SharedPreferencesCookieStore(
                 val index = getEffectiveURI(uri)
                 val cookies = uriIndex[index]
 
-                preferences.edit().putString(index.toString(), gson.toJson(cookies)).apply()
+                preferences.edit().putString(index.toString(), gson.toJson(cookies)).commit()
             }
         }
     }
@@ -69,7 +69,7 @@ open class SharedPreferencesCookieStore(
                     } else {
                         putString(index.toString(), gson.toJson(cookies))
                     }
-                }.apply()
+                }.commit()
             }
 
             result
