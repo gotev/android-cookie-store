@@ -40,6 +40,14 @@ class MainActivity : AppCompatActivity() {
             reloadUrl()
         }
 
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                val webKitCookieManager = android.webkit.CookieManager.getInstance()
+                val cookie = webKitCookieManager.getCookie(url)
+                Log.e("COOKIE", "For url $url: [$cookie]")
+            }
+        }
+
         reloadUrl()
     }
 
@@ -48,13 +56,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun reloadUrl() {
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                val webKitCookieManager = android.webkit.CookieManager.getInstance()
-                val cookie = webKitCookieManager.getCookie(url)
-                Log.e("COOKIE", "For url $url: [$cookie]")
-            }
-        }
         webView.loadUrl(App.webViewUrl)
     }
 }
