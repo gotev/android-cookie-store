@@ -1,6 +1,9 @@
 package net.gotev.cookiestoredemo
 
 import android.os.Bundle
+import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +48,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun reloadUrl() {
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                val webKitCookieManager = android.webkit.CookieManager.getInstance()
+                val cookie = webKitCookieManager.getCookie(url)
+                Log.e("COOKIE", "For url $url: [$cookie]")
+            }
+        }
         webView.loadUrl(App.webViewUrl)
     }
 }
