@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // login send back a cookie
         login.setOnClickListener {
             App.cookieAPI.login(LoginPayload(username = App.username))
                 .enqueue(object : Callback<Unit> {
@@ -34,6 +35,21 @@ class MainActivity : AppCompatActivity() {
                 })
         }
 
+        // home call sends the cookie back
+        login_status.setOnClickListener {
+            App.cookieAPI.home()
+                .enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        toast(response.body().orEmpty())
+                    }
+
+                    override fun onFailure(call: Call<String>, error: Throwable) {
+                        toast("Login status KO: $error")
+                    }
+                })
+        }
+
+        // this clears all the cookies
         clearCookies.setOnClickListener {
             App.cookieManager.removeAll()
             toast("Cookies Cleared!")
@@ -55,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    // load home in webview to check cookie sync
     private fun reloadUrl() {
         webView.loadUrl(App.webViewUrl)
     }

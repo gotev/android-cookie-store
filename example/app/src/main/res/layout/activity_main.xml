@@ -19,6 +19,12 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/login_status"
+        android:text="@string/login_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/clearCookies"
         android:text="@string/clear_cookies"
         android:layout_width="match_parent"

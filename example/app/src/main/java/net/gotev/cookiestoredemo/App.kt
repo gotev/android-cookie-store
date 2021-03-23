@@ -11,6 +11,7 @@ import net.gotev.cookiestore.okhttp.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.CookieManager
 import java.net.CookiePolicy
 
@@ -51,11 +52,12 @@ class App : Application() {
         // Setup for OkHttp
         val okHttpClient = OkHttpClient.Builder()
             .cookieJar(JavaNetCookieJar(cookieManager))
-            .addInterceptor(GanderInterceptor(this).showNotification(true))
+            .addNetworkInterceptor(GanderInterceptor(this).showNotification(true))
             .build()
 
         cookieAPI = Retrofit.Builder()
             .baseUrl(baseAPIUrl)
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
