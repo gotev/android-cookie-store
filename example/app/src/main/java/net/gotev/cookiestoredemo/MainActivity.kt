@@ -7,46 +7,44 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 /**
  * This is only to show the cookie store functionality with a WebView in the simplest way
  * possible to make you understand it. Don't take this as a production example!
  */
 class MainActivity : AppCompatActivity() {
+    private val scope = MainScope()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // login send back a cookie
+        // login sends back a cookie
         login.setOnClickListener {
-            App.cookieAPI.login(LoginPayload(username = App.username))
-                .enqueue(object : Callback<Unit> {
-                    override fun onFailure(call: Call<Unit>, error: Throwable) {
-                        toast("Login KO: $error")
-                    }
-
-                    override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                        toast("Login OK")
-                        reloadUrl()
-                    }
-                })
+            scope.launch {
+                try {
+                    App.cookieAPI.login(LoginPayload(username = App.username))
+                    toast("Login OK")
+                    reloadUrl()
+                } catch (exc: Throwable) {
+                    toast("Login KO: $exc")
+                }
+            }
         }
 
-        // home call sends the cookie back
+        // home call sends the cookie back to the server if present
         login_status.setOnClickListener {
-            App.cookieAPI.home()
-                .enqueue(object : Callback<String> {
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
-                        toast(response.body().orEmpty())
-                    }
-
-                    override fun onFailure(call: Call<String>, error: Throwable) {
-                        toast("Login status KO: $error")
-                    }
-                })
+            scope.launch {
+                try {
+                    val message = App.cookieAPI.home()
+                    toast(message)
+                } catch (exc: Throwable) {
+                    toast("Login status KO: $exc")
+                }
+            }
         }
 
         // this clears all the cookies
@@ -58,9 +56,9 @@ class MainActivity : AppCompatActivity() {
 
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                val webKitCookieManager = android.webkit.CookieManager.getInstance()
-                val cookie = webKitCookieManager.getCookie(url)
+                val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
                 Log.e("COOKIE", "For url $url: [$cookie]")
+                toast("Cookie for url $url: [$cookie]")
             }
         }
 

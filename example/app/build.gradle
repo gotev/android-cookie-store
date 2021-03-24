@@ -59,13 +59,15 @@ dependencies {
     implementation project(':cookie-store')
     implementation project(':cookie-store-okhttp')
 
-    def okHttpVersion = "4.2.2"
+    def okHttpVersion = "4.9.1"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 
-    def retrofitVersion = "2.7.0"
+    def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 }
 
 task prepareKotlinBuildScriptModel {}
