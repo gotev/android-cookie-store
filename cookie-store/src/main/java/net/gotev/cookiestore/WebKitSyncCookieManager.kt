@@ -7,7 +7,8 @@ import java.net.URI
 
 class WebKitSyncCookieManager(
     store: CookieStore,
-    cookiePolicy: CookiePolicy
+    cookiePolicy: CookiePolicy,
+    private val onWebKitCookieManagerError: ((Throwable) -> Unit)? = null
 ) : CookieManager(store, cookiePolicy) {
 
     private val webKitCookieManager by lazy {
@@ -15,16 +16,28 @@ class WebKitSyncCookieManager(
     }
 
     init {
-        webKitCookieManager.setAcceptCookie(true)
+        try {
+            webKitCookieManager.setAcceptCookie(true)
+        } catch (exc: Throwable) {
+            onWebKitCookieManagerError?.invoke(exc)
+        }
     }
 
     override fun put(uri: URI?, responseHeaders: MutableMap<String, MutableList<String>>?) {
         super.put(uri, responseHeaders)
-        cookieStore.syncToWebKitCookieManager()
+        try {
+            cookieStore.syncToWebKitCookieManager(webKitCookieManager)
+        } catch (exc: Throwable) {
+            onWebKitCookieManagerError?.invoke(exc)
+        }
     }
 
     fun removeAll() {
         cookieStore.removeAll()
-        webKitCookieManager.removeAll()
+        try {
+            webKitCookieManager.removeAll()
+        } catch (exc: Throwable) {
+            onWebKitCookieManagerError?.invoke(exc)
+        }
     }
 }

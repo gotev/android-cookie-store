@@ -34,9 +34,7 @@ fun HttpCookie.toSetCookieString(): String {
 }
 
 @Synchronized
-fun CookieStore.syncToWebKitCookieManager() {
-    val webKitCookieManager = android.webkit.CookieManager.getInstance()
-
+fun CookieStore.syncToWebKitCookieManager(webKitCookieManager: android.webkit.CookieManager = android.webkit.CookieManager.getInstance()) {
     cookies.forEach {
         val hostUrl = "${if (it.secure) "https" else "http"}://${it.domain}"
         webKitCookieManager.setCookie(hostUrl, it.toSetCookieString())
