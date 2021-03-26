@@ -11,13 +11,9 @@ class WebKitSyncCookieManager(
     private val onWebKitCookieManagerError: ((Throwable) -> Unit)? = null
 ) : CookieManager(store, cookiePolicy) {
 
-    private val webKitCookieManager by lazy {
-        android.webkit.CookieManager.getInstance()
-    }
-
     init {
         try {
-            webKitCookieManager.setAcceptCookie(true)
+            android.webkit.CookieManager.getInstance().setAcceptCookie(true)
         } catch (exc: Throwable) {
             onWebKitCookieManagerError?.invoke(exc)
         }
@@ -26,7 +22,7 @@ class WebKitSyncCookieManager(
     override fun put(uri: URI?, responseHeaders: MutableMap<String, MutableList<String>>?) {
         super.put(uri, responseHeaders)
         try {
-            cookieStore.syncToWebKitCookieManager(webKitCookieManager)
+            cookieStore.syncToWebKitCookieManager()
         } catch (exc: Throwable) {
             onWebKitCookieManagerError?.invoke(exc)
         }
@@ -35,7 +31,7 @@ class WebKitSyncCookieManager(
     fun removeAll() {
         cookieStore.removeAll()
         try {
-            webKitCookieManager.removeAll()
+            android.webkit.CookieManager.getInstance().removeAll()
         } catch (exc: Throwable) {
             onWebKitCookieManagerError?.invoke(exc)
         }
