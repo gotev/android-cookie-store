@@ -1,5 +1,6 @@
 package net.gotev.cookiestore
 
+import android.util.Log
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.net.CookieStore
@@ -11,29 +12,38 @@ class WebKitSyncCookieManager(
     private val onWebKitCookieManagerError: ((Throwable) -> Unit)? = null
 ) : CookieManager(store, cookiePolicy) {
 
-    init {
+    private inline fun handleExceptions(block: () -> Unit) {
         try {
-            android.webkit.CookieManager.getInstance().setAcceptCookie(true)
+            block()
         } catch (exc: Throwable) {
             onWebKitCookieManagerError?.invoke(exc)
+                ?: Log.e(
+                    "COOKIE-STORE",
+                    "Unhandled WebKitSyncCookieManager error. " +
+                        "You could handle it by setting onWebKitCookieManagerError when you create " +
+                        "WebKitSyncCookieManager. This exception is caused by the underlying " +
+                        "android.webkit.CookieManager", exc
+                )
+        }
+    }
+
+    init {
+        handleExceptions {
+            android.webkit.CookieManager.getInstance().setAcceptCookie(true)
         }
     }
 
     override fun put(uri: URI?, responseHeaders: MutableMap<String, MutableList<String>>?) {
         super.put(uri, responseHeaders)
-        try {
+        handleExceptions {
             cookieStore.syncToWebKitCookieManager()
-        } catch (exc: Throwable) {
-            onWebKitCookieManagerError?.invoke(exc)
         }
     }
 
     fun removeAll() {
         cookieStore.removeAll()
-        try {
+        handleExceptions {
             android.webkit.CookieManager.getInstance().removeAll()
-        } catch (exc: Throwable) {
-            onWebKitCookieManagerError?.invoke(exc)
         }
     }
 }
