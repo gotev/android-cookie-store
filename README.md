@@ -76,7 +76,7 @@ val cookieManager = WebKitSyncCookieManager(
     cookiePolicy = CookiePolicy.ACCEPT_ALL,
     onWebKitCookieManagerError = { exception ->
         // This gets invoked when there's internal webkit cookie manager exceptions
-        Log.e("SYNC-FAIL", "WebKitCookieManagerError", exception)
+        Log.e("COOKIE-STORE", "WebKitSyncCookieManager error", exception)
     }
 )
 ```
