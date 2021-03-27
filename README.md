@@ -72,8 +72,12 @@ You have two ways of doing this:
 #### Using WebKitSyncCookieManager
 ```kotlin
 val cookieManager = WebKitSyncCookieManager(
-    createCookieStore(name = "myCookies", persistent = true),
-    CookiePolicy.ACCEPT_ALL
+    store = createCookieStore(name = "myCookies", persistent = true),
+    cookiePolicy = CookiePolicy.ACCEPT_ALL,
+    onWebKitCookieManagerError = { exception ->
+        // This gets invoked when there's internal webkit cookie manager exceptions
+        Log.e("COOKIE-STORE", "WebKitSyncCookieManager error", exception)
+    }
 )
 ```
 Then follow standard instructions from the Usage section to setup `HttpURLConnection` or `OkHttp` according to your needs.

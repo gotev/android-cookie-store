@@ -1,6 +1,7 @@
 package net.gotev.cookiestoredemo
 
 import android.app.Application
+import android.util.Log
 import com.ashokvarma.gander.Gander
 import com.ashokvarma.gander.GanderInterceptor
 import com.ashokvarma.gander.imdb.GanderIMDB
@@ -40,8 +41,12 @@ class App : Application() {
         super.onCreate()
 
         cookieManager = WebKitSyncCookieManager(
-            createCookieStore(name = cookieStoreName, persistent = true),
-            CookiePolicy.ACCEPT_ALL
+            store = createCookieStore(name = cookieStoreName, persistent = true),
+            cookiePolicy = CookiePolicy.ACCEPT_ALL,
+            onWebKitCookieManagerError = { exception ->
+                // This gets invoked when there's internal webkit cookie manager exceptions
+                Log.e("COOKIE-STORE", "WebKitSyncCookieManager error", exception)
+            }
         )
 
         // Setup for HttpURLConnection

@@ -56,9 +56,14 @@ class MainActivity : AppCompatActivity() {
 
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
-                val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
-                Log.e("COOKIE", "For url $url: [$cookie]")
-                toast("Cookie for url $url: [$cookie]")
+                try {
+                    val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+                    Log.e("COOKIE", "For url $url: [$cookie]")
+                    toast("Cookie for url $url: [$cookie]")
+                } catch (exc: Throwable) {
+                    Log.e("COOKIE-MANAGER", "Android WebKitCookieManager error", exc)
+                    toast("$exc")
+                }
             }
         }
 
