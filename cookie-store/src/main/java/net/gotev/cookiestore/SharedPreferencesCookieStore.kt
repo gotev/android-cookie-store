@@ -48,9 +48,12 @@ open class SharedPreferencesCookieStore(
 
             uri?.let {
                 val index = getEffectiveURI(uri)
-                val cookies = uriIndex[index]
-
-                preferences.edit().putString(index.toString(), gson.toJson(cookies)).commit()
+                uriIndex[index]?.let { cookies ->
+                    preferences
+                        .edit()
+                        .putString(index.toString(), gson.toJson(ArrayList(cookies)))
+                        .commit()
+                }
             }
         }
     }
@@ -67,7 +70,7 @@ open class SharedPreferencesCookieStore(
                     if (cookies == null) {
                         remove(index.toString())
                     } else {
-                        putString(index.toString(), gson.toJson(cookies))
+                        putString(index.toString(), gson.toJson(ArrayList(cookies)))
                     }
                 }.commit()
             }
