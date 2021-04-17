@@ -8,9 +8,17 @@ then
   version=$(cat manifest.gradle | grep library_version | awk '{print $3}' | tr "'" "\n" | head -n 2 | tail -n 1)
   echo "released local version $version"
 else
-  echo "Bintray release..."
-  ./gradlew clean test publish bintrayUpload
-fi
+  echo "Releasing on Maven Central ..."
+  ./gradlew clean test publish -PmavSigning=true -PmavPublishToRemoteRepo=true --max-workers 1
 
-version=$(cat manifest.gradle | grep "library_version" | tr "'" '\n' | head -n 2 | tail -n 1)
-hub release create -m "$version" "$version"
+  echo "Generating Demo Apk ..."
+  ./generate-debug-apk
+
+  echo "Creating GitHub Release ..."
+  version=$(cat manifest.gradle | grep "library_version" | tr "'" '\n' | head -n 2 | tail -n 1)
+  hub release create -a cookie-store-demo-debug.apk -m "$version" "$version"
+
+  echo
+  echo "Done!"
+  echo "Visit https://oss.sonatype.org/#stagingRepositories and confirm the release"
+fi
