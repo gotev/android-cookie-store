@@ -1,6 +1,6 @@
 # Android Cookie Store
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Cookie%20Store-green.svg?style=flat)](https://android-arsenal.com/details/1/8000) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-394-green)](https://androidweekly.net/issues/issue-394) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/) ![Maven Central](https://img.shields.io/maven-central/v/net.gotev/cookie-store) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-#### [Latest version Release Notes and Demo App](https://github.com/gotev/android-cookie-store/releases/latest)
+#### [Latest version Release Notes and Demo App](https://github.com/gotev/android-cookie-store/releases/latest) | [Demo App Sources](https://github.com/gotev/android-cookie-store/tree/master/example/app/src/main/java/net/gotev/cookiestoredemo)
 
 Android InMemory and persistent Cookie Store for `HttpURLConnection` and `OkHttp`, with extensions to easily sync cookies in Android WebViews.
 
