@@ -42,4 +42,4 @@ jobs:
       with:
         java-version: 11
     - name: Build with Gradle
-      run: cd example && ./gradlew clean build
+      run: cd example && ./gradlew clean assembleDebug
