@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 android {
@@ -33,9 +32,9 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
-    def gander_version = "3.1.0"
-    debugImplementation "com.ashokvarma.android:gander-imdb:$gander_version"
-    releaseImplementation "com.ashokvarma.android:gander-no-op:$gander_version"
+    def chucker_version = "3.5.2"
+    debugImplementation "com.github.chuckerteam.chucker:library:$chucker_version"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chucker_version"
 
     // Core library
     androidTestImplementation "androidx.test:core:$androidx_test_core_version"
