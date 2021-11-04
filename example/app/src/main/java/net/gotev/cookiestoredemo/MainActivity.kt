@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // login sends back a cookie
-        login.setOnClickListener {
+        findViewById<Button>(R.id.login).setOnClickListener {
             scope.launch {
                 try {
                     App.cookieAPI.login(LoginPayload(username = App.username))
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // home call sends the cookie back to the server if present
-        login_status.setOnClickListener {
+        findViewById<Button>(R.id.login_status).setOnClickListener {
             scope.launch {
                 try {
                     val message = App.cookieAPI.home()
@@ -47,13 +47,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         // this clears all the cookies
-        clearCookies.setOnClickListener {
+        findViewById<Button>(R.id.clearCookies).setOnClickListener {
             App.cookieManager.removeAll()
             toast("Cookies Cleared!")
             reloadUrl()
         }
 
-        webView.webViewClient = object : WebViewClient() {
+        findViewById<WebView>(R.id.webView).webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 try {
                     val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
@@ -75,6 +75,6 @@ class MainActivity : AppCompatActivity() {
 
     // load home in webview to check cookie sync
     private fun reloadUrl() {
-        webView.loadUrl(App.webViewUrl)
+        findViewById<WebView>(R.id.webView).loadUrl(App.webViewUrl)
     }
 }

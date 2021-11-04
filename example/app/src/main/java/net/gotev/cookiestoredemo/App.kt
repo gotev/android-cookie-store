@@ -2,9 +2,7 @@ package net.gotev.cookiestoredemo
 
 import android.app.Application
 import android.util.Log
-import com.ashokvarma.gander.Gander
-import com.ashokvarma.gander.GanderInterceptor
-import com.ashokvarma.gander.imdb.GanderIMDB
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import net.gotev.cookiestore.InMemoryCookieStore
 import net.gotev.cookiestore.SharedPreferencesCookieStore
 import net.gotev.cookiestore.WebKitSyncCookieManager
@@ -52,12 +50,10 @@ class App : Application() {
         // Setup for HttpURLConnection
         CookieManager.setDefault(cookieManager)
 
-        Gander.setGanderStorage(GanderIMDB.getInstance())
-
         // Setup for OkHttp
         val okHttpClient = OkHttpClient.Builder()
             .cookieJar(JavaNetCookieJar(cookieManager))
-            .addNetworkInterceptor(GanderInterceptor(this).showNotification(true))
+            .addNetworkInterceptor(ChuckerInterceptor.Builder(this).build())
             .build()
 
         cookieAPI = Retrofit.Builder()
