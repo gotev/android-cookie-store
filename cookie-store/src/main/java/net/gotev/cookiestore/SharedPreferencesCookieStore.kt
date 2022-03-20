@@ -1,6 +1,7 @@
 package net.gotev.cookiestore
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -20,10 +21,10 @@ open class SharedPreferencesCookieStore(
             preferences.all.forEach { (key, value) ->
                 try {
                     val index = URI.create(key)
-                    val listType = object : TypeToken<ArrayList<HttpCookie>>() {}.type
-
-                    val cookies: ArrayList<HttpCookie> = gson.fromJson(value.toString(), listType)
-
+                    val listType = object : TypeToken<MutableList<InternalCookie>>() {}.type
+                    val internalCookies =
+                        gson.fromJson<MutableList<InternalCookie>>(value.toString(), listType)
+                    val cookies = internalCookies.map { it.toHttpCookie() }.toMutableList()
                     uriIndex[index] = cookies
                 } catch (exception: Throwable) {
                     Log.e(
@@ -36,45 +37,62 @@ open class SharedPreferencesCookieStore(
         }
     }
 
-    override fun removeAll(): Boolean = synchronized(SharedPreferencesCookieStore::class.java) {
-        super.removeAll()
-        preferences.edit().clear().commit()
-        true
-    }
-
-    override fun add(uri: URI?, cookie: HttpCookie?) {
+    override fun removeAll(): Boolean =
         synchronized(SharedPreferencesCookieStore::class.java) {
-            super.add(uri, cookie)
+            super.removeAll()
+            preferences.edit().clear().apply()
+            true
+        }
 
-            uri?.let {
-                val index = getEffectiveURI(uri)
-                uriIndex[index]?.let { cookies ->
-                    preferences
-                        .edit()
-                        .putString(index.toString(), gson.toJson(ArrayList(cookies)))
-                        .commit()
+    override fun add(uri: URI?, cookie: HttpCookie?) =
+        synchronized(SharedPreferencesCookieStore::class.java) {
+            uri ?: return@synchronized
+
+            super.add(uri, cookie)
+            val index = getEffectiveURI(uri)
+            val cookies = uriIndex[index] ?: return@synchronized
+
+            val internalCookies = cookies.map {
+                InternalCookie(it).apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        httpOnly = it.isHttpOnly
+                    }
                 }
             }
+
+            val listType = object : TypeToken<MutableList<InternalCookie>>() {}.type
+            val json = gson.toJson(internalCookies, listType)
+
+            preferences
+                .edit()
+                .putString(index.toString(), json)
+                .apply()
         }
-    }
 
     override fun remove(uri: URI?, cookie: HttpCookie?): Boolean =
         synchronized(SharedPreferencesCookieStore::class.java) {
+            uri ?: return false
+
             val result = super.remove(uri, cookie)
-
-            uri?.let {
-                val index = getEffectiveURI(uri)
-                val cookies = uriIndex[index]
-
-                preferences.edit().apply {
-                    if (cookies == null) {
-                        remove(index.toString())
-                    } else {
-                        putString(index.toString(), gson.toJson(ArrayList(cookies)))
+            val index = getEffectiveURI(uri)
+            val cookies = uriIndex[index]
+            val internalCookies = cookies?.map {
+                InternalCookie(it).apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        httpOnly = it.isHttpOnly
                     }
-                }.commit()
+                }
             }
+            val listType = object : TypeToken<MutableList<InternalCookie>>() {}.type
+            val json = gson.toJson(internalCookies, listType)
 
-            result
+            preferences.edit().apply {
+                when (cookies) {
+                    null -> remove(index.toString())
+                    else -> putString(index.toString(), json)
+                }
+            }.apply()
+
+            return result
         }
 }

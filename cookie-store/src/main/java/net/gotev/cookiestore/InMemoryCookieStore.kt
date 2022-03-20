@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock
 // Kotlin-ized starting from https://chromium.googlesource.com/android_tools/+/master/sdk/sources/android-25/java/net/InMemoryCookieStore.java
 open class InMemoryCookieStore(private val name: String) : CookieStore {
 
-    internal val uriIndex = LinkedHashMap<URI, ArrayList<HttpCookie>>()
+    internal val uriIndex = LinkedHashMap<URI, MutableList<HttpCookie>>()
     private val lock = ReentrantLock(false)
 
     override fun removeAll(): Boolean {
