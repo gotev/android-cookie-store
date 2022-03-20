@@ -21,7 +21,7 @@ ext {
     kotlin_lint_version = '9.0.0'
 
     // Library and app testing dependencies versions
-    junit_version = '4.13/2'
+    junit_version = '4.13'
     androidx_test_core_version = '1.4.0'
     androidx_test_runner_version = '1.4.0'
     androidx_test_rules_version = '1.4.0'

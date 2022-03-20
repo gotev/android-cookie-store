@@ -18,17 +18,17 @@ data class InternalCookie(
     var httpOnly: Boolean? = null
 ) {
     constructor(cookie: HttpCookie) : this(
-        cookie.comment,
-        cookie.commentURL,
-        cookie.discard,
-        cookie.domain,
-        cookie.maxAge,
-        cookie.name,
-        cookie.path,
-        cookie.portlist,
-        cookie.secure,
-        cookie.value,
-        cookie.version
+        comment = cookie.comment,
+        commentURL = cookie.commentURL,
+        discard = cookie.discard,
+        domain = cookie.domain,
+        maxAge = cookie.maxAge,
+        name = cookie.name,
+        path = cookie.path,
+        portlist = cookie.portlist,
+        secure = cookie.secure,
+        value = cookie.value,
+        version = cookie.version
     )
 
     fun toHttpCookie() = HttpCookie(name, value).apply {
